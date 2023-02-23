@@ -1,0 +1,75 @@
+<p-toast></p-toast>
+
+<app-header-page label="Catálogo"></app-header-page>
+
+<div class="ctn">
+	<p-carousel [value]="productosAuto" [numVisible]="3" [numScroll]="3" [circular]="false" [responsiveOptions]="responsiveOptions">
+		<ng-template pTemplate="header">
+			<h3>Componentes de automoviles</h3>
+		</ng-template>
+
+		<ng-template let-product pTemplate="item">
+			<div class="product-item">
+				<div class="product-item-content">
+					<div class="mb-3">
+						<img src="{{ product.imagen }}" [alt]="product.name" class="product-image" />
+					</div>
+
+					<div>
+						<h4 class="mb-1">{{ product.name }}</h4>
+
+						<h6 class="mt-0 mb-3">${{ product.precio }}</h6>
+
+						<div class="car-buttons mt-5">
+							<button pButton pRipple label="Agregar" class="p-button-success" icon="pi pi-shopping-cart" (click)="agregarElemento(product)"></button>
+						</div>
+					</div>
+				</div>
+			</div>
+		</ng-template>
+	</p-carousel>
+
+	<p-carousel [value]="productosMoto" [numVisible]="3" [numScroll]="3" [circular]="false" [responsiveOptions]="responsiveOptions">
+		<ng-template pTemplate="header">
+			<h3>Componentes de Motocicleta</h3>
+		</ng-template>
+		<ng-template let-product pTemplate="item">
+			<div class="product-item">
+				<div class="product-item-content">
+					<div class="mb-3">
+						<img src="{{ product.imagen }}" [alt]="product.name" class="product-image" />
+					</div>
+					<div>
+						<h4 class="mb-1">{{ product.name }}</h4>
+						<h6 class="mt-0 mb-3">${{ product.precio }}</h6>
+						<div class="car-buttons mt-5">
+							<button pButton pRipple label="Agregar" class="p-button-success" icon="pi pi-shopping-cart" (click)="agregarElemento(product)"></button>
+						</div>
+					</div>
+				</div>
+			</div>
+		</ng-template>
+	</p-carousel>
+
+	<p-carousel [value]="productosAccesorio" [numVisible]="3" [numScroll]="3" [circular]="false" [responsiveOptions]="responsiveOptions">
+		<ng-template pTemplate="header">
+			<h3>Accesorios</h3>
+		</ng-template>
+		<ng-template let-product pTemplate="item">
+			<div class="product-item">
+				<div class="product-item-content">
+					<div class="mb-3">
+						<img src="{{ product.imagen }}" [alt]="product.name" class="product-image" />
+					</div>
+					<div>
+						<h4 class="mb-1">{{ product.name }}</h4>
+						<h6 class="mt-0 mb-3">${{ product.precio }}</h6>
+						<div class="car-buttons mt-5">
+							<button pButton pRipple label="Agregar" class="p-button-success" icon="pi pi-shopping-cart" (click)="agregarElemento(product)"></button>
+						</div>
+					</div>
+				</div>
+			</div>
+		</ng-template>
+	</p-carousel>
+</div>

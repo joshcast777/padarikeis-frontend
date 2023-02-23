@@ -1,0 +1,44 @@
+h1 {
+	text-align: center;
+	margin-top: 30px;
+}
+
+.nosotrosContenido {
+	margin-top: 20px;
+	margin-bottom: 20px;
+}
+
+.main > img {
+	width: 100%;
+}
+
+.aside {
+	text-align: center;
+}
+
+@media (min-width: 768px) {
+	.nosotrosContenido {
+		display: flex;
+		gap: 20px;
+	}
+
+	.aside {
+		flex-shrink: 0;
+		flex-basis: 300px;
+	}
+}
+
+@media (min-width: 1024px) {
+	.imgNosotros {
+		height: 300px;
+	}
+
+	.nosotrosContenido {
+		gap: 40px;
+	}
+
+	.aside {
+		flex-shrink: 0;
+		flex-basis: 350px;
+	}
+}

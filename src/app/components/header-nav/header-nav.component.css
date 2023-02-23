@@ -1,0 +1,91 @@
+.logo {
+	width: 100px;
+	margin-right: 20px;
+}
+
+.carrito-button {
+	position: relative;
+}
+
+.avatar-header {
+	cursor: pointer;
+}
+
+.badge {
+	position: absolute;
+	top: -10px;
+	right: -10px;
+}
+
+.overlay-panel {
+	display: flex;
+	align-items: center;
+	gap: 20px;
+}
+
+.overlay-panel > div:last-child {
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+	align-items: flex-end;
+}
+
+.overlay-panel small {
+	text-decoration: underline;
+}
+
+.username {
+	cursor: pointer;
+	font-size: 18px;
+}
+
+.log-out {
+	cursor: pointer;
+}
+
+.form {
+	max-width: 725px;
+}
+
+.form-buttons {
+	margin-bottom: 10px;
+	margin-top: 20px;
+	display: flex;
+	justify-content: space-between;
+}
+
+.check-intereses {
+	display: flex;
+	align-items: center;
+	gap: 40px;
+}
+
+.input-block {
+	margin-bottom: 20px;
+}
+
+.input-block > label {
+	display: block;
+	margin-bottom: 5px;
+}
+
+.input {
+	display: block;
+}
+
+.switch-button {
+	text-align: center;
+}
+
+@media (min-width: 425px) {
+	.carrito-button {
+		display: block;
+	}
+}
+
+@media (min-width: 640px) {
+	.datos-register {
+		display: flex;
+		gap: 30px;
+	}
+}

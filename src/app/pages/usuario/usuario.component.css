@@ -1,0 +1,65 @@
+.imgPortada {
+	height: 300px;
+}
+.imgPortada img {
+	width: 100%;
+	height: 350px;
+}
+.avatar {
+	margin-left: 50px;
+}
+
+.card {
+	margin-top: 20px;
+	margin-bottom: 20px;
+}
+
+.spamUsuario {
+	display: block;
+	margin-bottom: 5px;
+	margin-left: 5px;
+}
+
+.contInfoU {
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+	gap: 20px;
+	padding: 20px 30px;
+}
+
+.contBotonEditar {
+	text-align: right;
+}
+
+.contBotonEditar button {
+	margin: 10px 20px;
+}
+
+.contCheckBox > p-checkbox {
+	margin-right: 5px;
+	margin-left: 15px;
+}
+
+.eliminar-usuario {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+}
+
+.fieldset-border {
+	border: 1px solid red;
+}
+
+@media (max-width: 425px) {
+	.contBotonEditar {
+		display: flex;
+		flex-direction: column;
+	}
+}
+
+@media (max-width: 640px) {
+	.contInfoU {
+		grid-template-columns: 1fr;
+		gap: 20px;
+	}
+}

@@ -1,0 +1,85 @@
+<p-toast></p-toast>
+
+<app-header-page label="Carrito de compras"></app-header-page>
+
+<div class="ctn content">
+	<div class="card-layout">
+		<p-table #dt [value]="carrito" dataKey="id" class="table">
+			<ng-template pTemplate="header">
+				<tr>
+					<th>Nombre</th>
+					<th>Image</th>
+					<th>Price</th>
+					<th>Cantidad</th>
+					<th>Total</th>
+					<th>Acciones</th>
+				</tr>
+			</ng-template>
+
+			<ng-template pTemplate="body" let-carrito>
+				<tr>
+					<td>{{ carrito.name }}</td>
+					<td style="text-align: center">
+						<img [src]="carrito.imagen" [alt]="carrito.name" style="max-width: 150px; height: 150px" />
+					</td>
+					<td style="text-align: center">{{ carrito.precio | currency : "USD" }}</td>
+					<td style="text-align: center">{{ carrito.cantidad }}</td>
+					<td style="text-align: center">{{ carrito.precio * carrito.cantidad | currency : "USD" }}</td>
+					<td style="text-align: center">
+						<button pButton pRipple icon="pi pi-minus" class="p-button-rounded p-button-success mr-2" style="margin-right: 10px" (click)="restarCantidad(carrito)"></button>
+
+						<button pButton pRipple icon="pi pi-plus" class="p-button-rounded p-button-success mr-2" style="margin-right: 10px" (click)="aumentarCantidad(carrito)"></button>
+
+						<button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-danger" (click)="quitarElemento(carrito.id)"></button>
+					</td>
+				</tr>
+			</ng-template>
+		</p-table>
+	</div>
+
+	<div class="compra-button">
+		<span>{{ total | currency: "USD" }}</span>
+
+		<button pButton pRipple type="button" label="Comprar" class="p-button-raised p-button-success" (click)="mostrarFormularioCompra()" [disabled]="total === 0"></button>
+	</div>
+</div>
+
+<p-dialog header="Realizar compra" [modal]="true" [(visible)]="visible">
+	<form (ngSubmit)="comprar()" autocomplete="off" [formGroup]="myForm" class="form-compra">
+		<div class="labels-head">
+			<label>Total</label>
+
+			<label>{{ total | currency: "USD" }}</label>
+		</div>
+
+		<div class="input-block">
+			<label for="nombreTarjeta">Nombre en la tarjeta</label>
+
+			<input type="text" pInputText id="nombreTarjeta" formControlName="nombreTarjeta" pInputText styleClass="input" placeholder="Nombre en la tarjeta" />
+		</div>
+
+		<div class="input-block">
+			<label for="numeroTarjeta">Número de la tarjeta</label>
+
+			<p-inputMask inputId="numeroTarjeta" mask="9999-9999-9999-9999" formControlName="numeroTarjeta" placeholder="0000-0000-0000-0000" slotChar="____-____-____-____" class="input"></p-inputMask>
+		</div>
+
+		<div class="input-block">
+			<label for="codigoSeguridad">Código de seguridad</label>
+
+			<p-inputMask inputId="codigoSeguridad" mask="999" formControlName="codigoSeguridad" placeholder="000" slotChar="___" class="input"></p-inputMask>
+		</div>
+
+		<div class="input-block">
+			<label for="fechaVencimiento">Fecha de vencimiento</label>
+
+			<p-inputMask inputId="fechaVencimiento" mask="99/9999" formControlName="fechaVencimiento" placeholder="mm/aaaa" slotChar="__/____" class="input"></p-inputMask>
+		</div>
+
+		<div class="form-buttons">
+			<button pButton pRipple type="reset" label="Cancelar" class="p-button-outlined" (click)="visible = false"></button>
+
+			<button pButton pRipple type="submit" label="Guardar" [disabled]="myForm.invalid" class="p-button-raised"></button>
+		</div>
+	</form>
+</p-dialog>

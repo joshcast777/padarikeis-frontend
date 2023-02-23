@@ -1,0 +1,73 @@
+.registrar-vehiculo > div:last-child {
+	margin-top: 30px;
+	text-align: center;
+}
+
+.card-layout {
+	margin-bottom: 50px;
+}
+
+.card {
+	display: block;
+	margin-bottom: 30px;
+}
+
+.card-img {
+	object-fit: cover;
+	height: 200px;
+}
+
+.form-servicio {
+	max-width: 725px;
+}
+
+.form-buttons {
+	margin-top: 20px;
+	display: flex;
+	justify-content: space-between;
+}
+
+.input-block {
+	margin-bottom: 20px;
+}
+
+.input-block > label {
+	display: block;
+}
+
+.input {
+	display: block;
+}
+
+@media (min-width: 640px) {
+	.registrar-vehiculo {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		gap: 40px;
+	}
+
+	.card-layout {
+		display: flex;
+		justify-content: center;
+		align-items: stretch;
+		gap: 30px;
+		flex-wrap: wrap;
+	}
+
+	.card {
+		flex-basis: calc(50% - 20px);
+	}
+}
+
+@media (min-width: 768px) {
+	.registrar-vehiculo {
+		gap: 100px;
+	}
+}
+
+@media (min-width: 1024px) {
+	.card {
+		flex-basis: calc((100% / 3) - 30px);
+	}
+}

@@ -1,0 +1,69 @@
+<p-toast></p-toast>
+
+<app-header-page label="Servicios"></app-header-page>
+
+<p-divider></p-divider>
+
+<div class="ctn registrar-vehiculo">
+	<div>
+		<h2>Servicios automotrices varios</h2>
+
+		<p>Al ser el mejor centro automotriz de Guayaquil, en PADARIKEIS AUTOMOTORS nos hemos preparado para atender todas tu necesidades y ser tu mejor apoyo en caso de emergancias. De esta manera podemos ofrecerte un servicio integral, stock de repuestos y accesorios para que todo lo que necesites, lo encuentres aquí y de manera inmediata.</p>
+	</div>
+
+	<div>
+		<button pButton pRipple type="button" label="Registrar" class="p-button-raised" (click)="showDialogOrToast()"></button>
+	</div>
+</div>
+
+<p-divider></p-divider>
+
+<div class="ctn card-layout">
+	<p-card *ngFor="let servicio of servicios" [header]="servicio.nombre" [subheader]="'$ ' + (servicio.precio)" class="card">
+		<ng-template pTemplate="header">
+			<img [alt]="servicio.nombre" [src]="servicio.imagen" class="card-img" />
+		</ng-template>
+
+		<p>{{ servicio.texto }}</p>
+	</p-card>
+</div>
+
+<p-dialog header="Registrar vehídulo para servicio" [modal]="true" [(visible)]="visible">
+	<form (ngSubmit)="onSubmit()" autocomplete="off" [formGroup]="myForm" class="form-servicio">
+		<p-fieldset legend="Datos del vehículo" class="datos">
+			<div class="input-block">
+				<label for="placaVehiculo">Placa del vehículo</label>
+
+				<input type="text" pInputText id="placaVehiculo" formControlName="placaVehiculo" pInputText styleClass="input" placeholder="Placa" />
+			</div>
+
+			<div class="input-block">
+				<label for="marcaVehiculo">Marca del vehículo</label>
+
+				<p-dropdown inputId="marcaVehiculo" formControlName="marcaVehiculo" [options]="marcasVehiculos" placeholder="Modelo" styleClass="input" selectedItem="Guayaquil"></p-dropdown>
+			</div>
+
+			<div class="input-block">
+				<label for="anioFabricacion">Año del vehículo</label>
+
+				<p-inputNumber inputId="anioFabricacion" formControlName="anioVehiculo" placeholder="Año" [useGrouping]="false" class="input" [max]="anioFabricacion"></p-inputNumber>
+			</div>
+
+			<div class="input-block">
+				<label for="servicios">Seleccione servicio</label>
+
+				<p-dropdown inputId="servicios" formControlName="servicio" [options]="nombreServicios" placeholder="Servicio" styleClass="input"></p-dropdown>
+			</div>
+		</p-fieldset>
+
+		<div class="form-buttons">
+			<button pButton pRipple type="reset" label="Cancelar" class="p-button-outlined" (click)="visible = false"></button>
+
+			<button pButton pRipple type="submit" label="Guardar" [disabled]="myForm.invalid" class="p-button-raised"></button>
+		</div>
+	</form>
+</p-dialog>
+
+<!-- <ng-template #noEstaAutenticado>
+	<p-messages [(value)]="msg" [closable]="false"></p-messages>
+</ng-template> -->

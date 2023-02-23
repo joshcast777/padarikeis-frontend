@@ -1,0 +1,39 @@
+.footer {
+	background-color: #252525;
+}
+
+.footer-content {
+	padding: 20px 0;
+	margin: 0 auto;
+	width: 100%;
+}
+
+.footerTitulo {
+	text-align: center;
+}
+
+.footer-content > div:nth-child(1) > img {
+	display: block;
+	margin: 0 auto;
+	width: 75%;
+	height: auto;
+}
+
+@media (min-width: 425px) {
+	.footer-content {
+		display: flex;
+		align-items: center;
+		gap: 20px;
+		flex-wrap: wrap;
+	}
+
+	.footer-content > div {
+		flex-basis: calc(50% - 20px);
+	}
+}
+
+@media (min-width: 1024px) {
+	.footer-content > div {
+		flex-basis: calc(25% - 20px);
+	}
+}

@@ -1,0 +1,145 @@
+<p-toast></p-toast>
+
+<p-menubar [model]="items">
+	<ng-template pTemplate="start">
+		<img src="/assets/logo.png" alt="logo" class="logo" [routerLink]="['/']" />
+	</ng-template>
+
+	<ng-template pTemplate="end">
+		<div *ngIf="usuarioAutenticado; else noAutenticado" class="user-icon">
+			<p-avatar icon="pi pi-user" styleClass="mr-2" class="avatar-header" size="large" (click)="op.toggle($event)"></p-avatar>
+
+			<p-overlayPanel #op [style]="{ minWidth: 'max-content' }">
+				<ng-template pTemplate>
+					<div class="overlay-panel">
+						<div class="carrito-button" [routerLink]="['/carrito']">
+							<button pButton pRipple type="button" icon="pi pi-shopping-cart" class="p-button-rounded p-button-secondary"></button>
+
+							<p-badge *ngIf="carritoServicio.longitudCarrito !== 0" value="" severity="warning" class="badge"></p-badge>
+						</div>
+
+						<div>
+							<span class="username" [routerLink]="['/usuario']">{{ usuarioAutenticado.nombre + " " + usuarioAutenticado.apellido }}</span>
+
+							<br />
+
+							<small class="log-out" (click)="logOut()">Cerrar sesión</small>
+						</div>
+					</div>
+				</ng-template>
+			</p-overlayPanel>
+		</div>
+	</ng-template>
+</p-menubar>
+
+<ng-template #noAutenticado>
+	<button pButton pRipple type="button" label="Login" class="p-button-raised p-button-secondary" (click)="showLoginDialog()"></button>
+</ng-template>
+
+<p-dialog header="Iniciar sesión" [(visible)]="visibleLogin" (onHide)="onResetLogin()" [modal]="true" [draggable]="false" [resizable]="false">
+	<div>
+		<form (ngSubmit)="onSubmitLogin()" autocomplete="off" [formGroup]="myFormLogin" class="form">
+			<div class="datos-login">
+				<div class="input-block">
+					<label for="placaVehiculo">Email</label>
+
+					<input type="email" pInputText id="email" formControlName="email" pInputText styleClass="input" placeholder="Email" />
+				</div>
+
+				<div class="input-block">
+					<label for="password">Contraseña</label>
+
+					<p-password inputId="password" formControlName="password" [toggleMask]="true" [feedback]="false" styleClass="input" placeholder="Contraseña"></p-password>
+				</div>
+			</div>
+
+			<div class="form-buttons">
+				<button pButton pRipple type="reset" label="Cancelar" class="p-button-outlined" (click)="visibleLogin = false"></button>
+
+				<button pButton pRipple type="submit" label="Ingresar" [disabled]="myFormLogin.invalid" class="p-button-raised"></button>
+			</div>
+		</form>
+
+		<div class="switch-button">
+			<p-button label="Crear cuenta" styleClass="p-button-link" (click)="switchDialog()"></p-button>
+		</div>
+	</div>
+</p-dialog>
+
+<p-dialog header="Reegistrar usuario" [(visible)]="visibleRegister" (onHide)="onResetRegister()" [modal]="true" [draggable]="false" [resizable]="false">
+	<div>
+		<form (ngSubmit)="onSubmitRegister()" autocomplete="off" [formGroup]="myFormRegister" class="form">
+			<div>
+				<div class="input-block">
+					<label for="cedula">Cédula</label>
+
+					<input type="text" pInputText id="cedula" formControlName="cedula" pInputText styleClass="input" placeholder="Cédula" />
+				</div>
+
+				<div class="input-block">
+					<label for="nombre">Nombre</label>
+
+					<input type="text" pInputText id="nombre" formControlName="nombre" pInputText styleClass="input" placeholder="Nombre" />
+				</div>
+
+				<div class="input-block">
+					<label for="apellido">Apellido</label>
+
+					<input type="text" pInputText id="apellido" formControlName="apellido" pInputText styleClass="input" placeholder="Apellido" />
+				</div>
+
+				<div class="input-block">
+					<label for="ciudad">Ciudad</label>
+
+					<input type="text" pInputText id="ciudad" formControlName="ciudad" pInputText styleClass="input" placeholder="Ciudad" />
+				</div>
+
+				<div class="input-block">
+					<label for="celular">Celular</label>
+
+					<input type="text" pInputText id="celular" formControlName="celular" pInputText styleClass="input" placeholder="Celular" />
+				</div>
+
+				<!-- <div class="input-block">
+					<label for="mayorInteres">Mayor interés</label>
+
+					<div class="check-intereses">
+						<div class="field-checkbox">
+							<p-checkbox formControlName="mayorInteres" value="carro" inputId="carro"></p-checkbox>
+
+							<label for="carro">Carro</label>
+						</div>
+
+						<div class="field-checkbox">
+							<p-checkbox formControlName="mayorInteres" value="moto" inputId="moto"></p-checkbox>
+
+							<label for="moto">Moto</label>
+						</div>
+					</div>
+				</div> -->
+
+				<div class="input-block">
+					<label for="placaVehiculo">Email</label>
+
+					<input type="email" pInputText id="email" formControlName="email" pInputText styleClass="input" placeholder="Email" />
+				</div>
+
+				<div class="input-block">
+					<label for="password">Contraseña</label>
+
+					<p-password inputId="password" formControlName="password" [toggleMask]="true" [feedback]="false" styleClass="input" placeholder="Contraseña"></p-password>
+				</div>
+			</div>
+
+			<div class="form-buttons">
+				<button pButton pRipple type="reset" label="Cancelar" class="p-button-outlined" (click)="visibleRegister = false"></button>
+
+				<button pButton pRipple type="submit" label="Registrarse" [disabled]="myFormRegister.invalid" class="p-button-raised"></button>
+			</div>
+		</form>
+
+		<div class="switch-button">
+			<p-button label="Iniciar sesión" styleClass="p-button-link" (click)="switchDialog()"></p-button>
+		</div>
+	</div>
+</p-dialog>

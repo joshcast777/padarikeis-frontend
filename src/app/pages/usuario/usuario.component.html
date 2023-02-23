@@ -1,0 +1,176 @@
+<div>
+	<div class="imgPortada">
+		<img src="/assets/img/imgUsuario/portada.jpg" alt="portada" />
+	</div>
+
+	<div class="avatar">
+		<p-avatar icon="pi pi-user" styleClass="mr-2" size="xlarge" [style]="{ 'background-color': '#252525', color: '#ffffff' }"></p-avatar>
+	</div>
+</div>
+
+<div class="ctn card">
+	<p-tabView>
+		<p-tabPanel header="Informacion Personal" rightIcon="pi pi-user">
+			<p-fieldset legend="Editar usuario">
+				<form [formGroup]="editarUsuario">
+					<div>
+						<div class="contInfoU">
+							<div>
+								<span class="spamUsuario">Email: </span>
+
+								<input id="disabled-input" type="text" pInputText formControlName="email" />
+							</div>
+
+							<div>
+								<span class="spamUsuario">Nombres: </span>
+
+								<input id="disabled-input" type="text" pInputText formControlName="nombre" />
+							</div>
+
+							<div>
+								<span class="spamUsuario">apellidos: </span>
+
+								<input id="disabled-input" type="text" pInputText formControlName="apellido" />
+							</div>
+
+							<div>
+								<span class="spamUsuario">Ciudad: </span>
+
+								<p-dropdown [dataKey]="usuario?.ciudad ?? ''" [options]="ciudad" placeholder="Seleccione" formControlName="ciudad"></p-dropdown>
+							</div>
+
+							<div>
+								<span class="spamUsuario">Preferencias: </span>
+
+								<div class="contCheckBox">
+									<p-checkbox value="carro" inputId="carro" formControlName="mayorInteres" trueValue="carro"></p-checkbox>
+
+									<label for="carro">Carro</label>
+
+									<p-checkbox value="moto" inputId="moto" formControlName="mayorInteres" trueValue="moto"></p-checkbox>
+
+									<label for="moto">Moto</label>
+								</div>
+							</div>
+
+							<div>
+								<span class="spamUsuario">contraseña: </span>
+
+								<p-password [toggleMask]="true" formControlName="password"></p-password>
+							</div>
+						</div>
+
+						<div class="contBotonEditar">
+							<button pButton pRipple type="button" label="Editar" class="p-button-warning" (click)="editar()" [disabled]="!editarUsuario.disabled"></button>
+
+							<button pButton pRipple type="submit" label="Guardar" [disabled]="editarUsuario.invalid || editarUsuario.pristine"></button>
+
+							<button pButton pRipple type="button" label="Cancelar" (click)="cancelar()" class="p-button-outlined" [disabled]="editarUsuario.disabled"></button>
+						</div>
+					</div>
+				</form>
+			</p-fieldset>
+
+			<div style="height: 50px"></div>
+
+			<p-fieldset legend="Eliminar usuario">
+				<div class="eliminar-usuario">
+					<div>
+						<h2>Eliminar usuario</h2>
+
+						<p>Esta acción no se revertirá</p>
+					</div>
+
+					<button pButton pRipple type="button" label="Eliminar usuario" class="p-button-danger" (click)="eliminarUsuario()"></button>
+				</div>
+			</p-fieldset>
+		</p-tabPanel>
+
+		<p-tabPanel header="Capacitaciones" rightIcon="pi pi-folder">
+			<p-table [value]="capacitaciones" [tableStyle]="{ 'min-width': '50rem' }">
+				<ng-template pTemplate="header">
+					<tr>
+						<th style="text-align: center">#</th>
+						<th>Ocupación</th>
+						<th>Capacitación</th>
+						<th>Hora</th>
+						<th>Comentario</th>
+					</tr>
+				</ng-template>
+
+				<ng-template pTemplate="body" let-product let-index="rowIndex">
+					<tr>
+						<td style="width: 70px; text-align: center">{{ index }}</td>
+						<td>{{ product.ocupacion }}</td>
+						<td>{{ product.capacitacion }}</td>
+						<td style="width: 300px">{{ product.hora }}</td>
+						<td style="width: 500px">{{ product.comentario }}</td>
+					</tr>
+				</ng-template>
+			</p-table>
+		</p-tabPanel>
+
+		<p-tabPanel header="Compras realizadas" rightIcon="pi pi-shopping-cart">
+			<p-table [value]="compras" sortField="id" sortMode="single" rowGroupMode="subheader" groupRowsBy="id" [tableStyle]="{ 'min-width': '60rem' }">
+				<ng-template pTemplate="header">
+					<tr>
+						<th>Artículo</th>
+						<th>Imagen</th>
+						<th>Precio</th>
+						<th>Cantidad</th>
+						<th>Subtotal</th>
+					</tr>
+				</ng-template>
+
+				<ng-template pTemplate="groupheader" let-compra>
+					<tr pRowGroupHeader style="background-color: #2c2c2c">
+						<td colspan="5" style="padding: 15px 0 15px 50px; font-size: 20px; font-weight: bold">{{ compra.nombreTarjeta }}</td>
+					</tr>
+				</ng-template>
+
+				<ng-template pTemplate="groupfooter" let-compra>
+					<tr style="background-color: #2c2c2c">
+						<td colspan="2">
+							Fecha de la compra: <span style="font-weight: bold">{{ compra.fecha | date : "dd/MM/yyyy" }}</span>
+						</td>
+						<td colspan="3" style="text-align: right">
+							<span style="display: flex">
+								<span>Total compra:</span>
+
+								<span style="flex-grow: 1"></span>
+
+								<span style="font-weight: bold">{{ compra.total | currency : "USD" }}</span>
+							</span>
+						</td>
+					</tr>
+				</ng-template>
+
+				<ng-template pTemplate="body" let-compra>
+					<tr *ngFor="let producto of compra.productos">
+						<td style="width: 50%">{{ producto.name }}</td>
+						<td style="width: 50%; text-align: center"><img [src]="producto.imagen" alt="producto.name" style="width: 130px; height: 130px" /></td>
+						<td style="text-align: right; width: 100px">{{ producto.precio | currency : "USD" }}</td>
+						<td style="text-align: center; width: 100px">{{ producto.cantidad }}</td>
+						<td style="text-align: right; width: 100px">{{ producto.precio * producto.cantidad | currency : "USD" }}</td>
+					</tr>
+				</ng-template>
+			</p-table>
+		</p-tabPanel>
+
+		<p-tabPanel header="Servicios guardados" rightIcon="pi pi-folder">
+			<p-table [columns]="serviciosColumnas" [value]="servicios" [tableStyle]="{ 'min-width': '50rem' }">
+				<ng-template pTemplate="header" let-columns>
+					<tr>
+						<th *ngFor="let col of columns">{{ col.header }}</th>
+					</tr>
+				</ng-template>
+
+				<ng-template pTemplate="body" let-rowData let-columns="columns">
+					<tr>
+						<td *ngFor="let col of columns">{{ rowData[col.field] }}</td>
+					</tr>
+				</ng-template>
+			</p-table>
+		</p-tabPanel>
+	</p-tabView>
+</div>

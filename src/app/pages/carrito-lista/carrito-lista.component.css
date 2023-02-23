@@ -1,0 +1,134 @@
+.content {
+	margin-top: 30px;
+	margin-bottom: 30px;
+}
+
+.card-layout {
+	padding: 0 10px;
+	display: flex;
+	flex-direction: column;
+	gap: 20px;
+	flex-grow: 1;
+}
+
+.dataElemento {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 15px;
+}
+
+.compra-button {
+	padding: 0 10px;
+	position: sticky;
+	bottom: 10px;
+	background-color: var(--gray-600);
+	border-radius: 3px;
+	height: 75px;
+	margin-top: 20px;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+}
+
+.compra-button > span {
+	font-size: 30px;
+}
+
+.table {
+	width: 100%;
+}
+
+.column {
+	text-align: center;
+}
+
+.labels-head {
+	margin-bottom: 20px;
+	text-align: center;
+	display: flex;justify-content: space-between;
+	align-items: flex-end;
+}
+
+.labels-head > label:first-child {
+	font-size: 20px;
+}
+
+.labels-head > label:last-child {
+	font-size: 30px;
+}
+
+.form-compra {
+	max-width: 725px;
+}
+
+.input-block {
+	margin-bottom: 20px;
+}
+
+.input-block > label {
+	display: block;
+	margin-bottom: 5px;
+}
+
+.input {
+	display: block;
+}
+
+.form-buttons {
+	margin-top: 20px;
+	display: flex;
+	justify-content: space-between;
+}
+
+@media (min-width: 425px) {
+	.card-layout {
+		flex-direction: row;
+		align-items: stretch;
+		flex-wrap: wrap;
+		gap: 15px;
+	}
+
+	.card {
+		flex-basis: calc(50% - 7.5px);
+	}
+}
+
+@media (min-width: 768px) {
+	.card-layout {
+		gap: 20px;
+	}
+
+	.card {
+		flex-basis: calc((100% / 3) - 13.4px);
+	}
+}
+
+@media (min-width: 1024px) {
+	.content {
+		display: flex;
+		align-items: start;
+		gap: 20px;
+	}
+
+	.card-layout {
+		padding: 0;
+	}
+
+	.compra-button {
+		margin-top: 0;
+		padding: 10px 0;
+		height: auto;
+		flex-basis: 200px;
+		flex-shrink: 0;
+		top: 90px;
+		flex-direction: column;
+		gap: 30px;
+	}
+}
+
+@media (min-width: 1440px) {
+	.card {
+		flex-basis: calc(25% - 15px);
+	}
+}
