@@ -1,5 +1,5 @@
 import { Injectable } from "@angular/core";
-import { IProducto } from "../interfaces/interfaces";
+import { ICompraDatos, IDetalleCompra, IProducto, IProductoCarrito } from "../interfaces/interfaces";
 import { v4 as uuid } from "uuid";
 import { Observable } from "rxjs";
 import { HttpClient } from "@angular/common/http";
@@ -9,9 +9,7 @@ import { environment } from "src/environments/environment";
 	providedIn: "root"
 })
 export class TiendaService {
-	private carrito: IProducto[] = [];
-
-	public longitudCarrito: number = 0;
+	private carrito: IProductoCarrito[] = [];
 
 	private env = environment.urlApi;
 
@@ -21,35 +19,27 @@ export class TiendaService {
 		return this.http.get<IProducto[]>(`${this.env}/api/Producto`);
 	}
 
-	// obtenerProductosAutos(): IProducto[] {
-	// 	return [...this.productosAutos];
-	// }
+	agregarElemento(producto: IProducto): void {
+		this.carrito.push({ producto, cantidad: 1 });
+	}
 
-	// obtenerProductosMotos(): IProducto[] {
-	// 	return [...this.productosMotos];
-	// }
+	obtenerCarrito(): IProductoCarrito[] {
+		return this.carrito;
+	}
 
-	// obtenerAccesorios(): IProducto[] {
-	// 	return [...this.accesorios];
-	// }
+	eliminarElemento(productoId: number): IProductoCarrito[] {
+		this.carrito = this.carrito.filter((productoCarrito: IProductoCarrito) => productoCarrito.producto.productoId !== productoId);
 
-	// agregarElemento(product: IProducto): void {
-	// 	product.id = uuid();
+		console.log(this.carrito);
 
-	// 	this.carrito.push(product);
-	// 	this.longitudCarrito = this.carrito.length;
-	// }
+		return this.carrito;
+	}
 
-	// obtenerCarrito(): IProducto[] {
-	// 	return [...this.carrito];
-	// }
+	registrarCompra(compraDatos: ICompraDatos): Observable<ICompraDatos> {
+		return this.http.post<ICompraDatos>(`${this.env}/api/Compra`, compraDatos);
+	}
 
-	// eliminarElemento(id: string): void {
-	// 	this.carrito = this.carrito.filter((producto: IProducto) => producto.id !== id);
-	// 	this.longitudCarrito = this.carrito.length;
-	// }
-
-	// vaciarCarrito() {
-	// 	this.carrito = [];
-	// }
+	registrarDetalleCompra(detalleCompra: IDetalleCompra[]): Observable<IDetalleCompra> {
+		return this.http.post<IDetalleCompra>(`${this.env}/api/DetalleCompra`, detalleCompra);
+	}
 }

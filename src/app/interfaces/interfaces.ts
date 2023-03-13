@@ -10,17 +10,43 @@ export interface ICapacitacion {
 	texto: string;
 }
 
-export interface ICompraCarrito {
-	id: string;
-	productos: IProducto[];
-	cantidadProductos: number;
-	usuarioId?: string;
-	fecha: Date;
-	total: number;
+export interface ICapacitacionRegistrada {
+	capacitacionRegistradaId?: number;
+	ocupacion: string;
+	lugar: string;
+	hora: string;
+	motivo: string;
+	usuarioId: number;
+	capacitacionId: number;
+}
+
+// export interface ICompraCarrito {
+// 	id: string;
+// 	productos: IProducto[];
+// 	cantidadProductos: number;
+// 	usuarioId?: string;
+// 	fecha: Date;
+// 	total: number;
+// 	nombreTarjeta: string;
+// 	numeroTarjeta: string;
+// 	fechaVencimiento: string;
+// 	codigoSeguridad: string;
+// }
+
+export interface ICompraDatos {
+	compraId?: number;
 	nombreTarjeta: string;
 	numeroTarjeta: string;
+	condigoTarjeta: string;
 	fechaVencimiento: string;
-	codigoSeguridad: string;
+	usuarioId: number;
+}
+
+export interface IDetalleCompra {
+	compraDetalleId?: number;
+	cantidad: number;
+	productoId: number;
+	compraId: number;
 }
 
 export interface IProducto {
@@ -31,6 +57,11 @@ export interface IProducto {
 	categoriaProductoId: number;
 }
 
+export interface IProductoCarrito {
+	producto: IProducto;
+	cantidad: number;
+}
+
 export interface IServicio {
 	servicioId: number;
 	imagen: string;
@@ -39,12 +70,22 @@ export interface IServicio {
 	texto: string;
 }
 
+export interface IServicioRegistrado {
+	servicioRegistradoId?: number;
+	placaVehiculo: string;
+	marcaVehiculo: string;
+	anioVehiculo: number;
+	servicioId: number;
+	usuarioId: number;
+}
+
 export interface IUsuario {
-	id: string;
+	usuarioId: number;
+	cedula: string;
 	nombre: string;
 	apellido: string;
 	ciudad: string;
-	mayorInteres: string;
+	celular: number;
 	email: string;
-	password: string;
+	contrasena: string;
 }

@@ -1,6 +1,5 @@
 import { Injectable } from "@angular/core";
-import { IServicio } from "../interfaces/interfaces";
-import { AuthService } from "./auth.service";
+import { IServicio, IServicioRegistrado } from "../interfaces/interfaces";
 import { HttpClient } from "@angular/common/http";
 import { Observable } from "rxjs";
 import { environment } from "src/environments/environment";
@@ -11,18 +10,21 @@ import { environment } from "src/environments/environment";
 export class ServiciosService {
 	private env = environment.urlApi;
 
-	constructor(private authService: AuthService, private http: HttpClient) {}
+	constructor(private http: HttpClient) {}
 
 	obtenerServicios(): Observable<IServicio[]> {
 		return this.http.get<IServicio[]>(`${this.env}/api/Servicio`);
 	}
 
-	// agregarServicio(servicio: IServicio): void {
-	// 	servicio.servicioId = 1;
-	// 	servicio.usuarioId = this.authService.obtenerUsuarioAutenticado()?.id;
+	agregarServicio(datoServicio: IServicioRegistrado): Observable<IServicioRegistrado> {
+		console.log(datoServicio);
 
-	// 	this.serviciosRegistrados.push(servicio);
-	// }
+		return this.http.post<IServicioRegistrado>(`${this.env}/api/ServicioRegistrado`, datoServicio);
+	}
+
+	obtenerServiciosUsuario(usuarioId: number): Observable<IServicioRegistrado[]> {
+		return this.http.get<IServicioRegistrado[]>(`${this.env}/api/ServicioRegistrado/${usuarioId}`);
+	}
 
 	// eliminarServicio(id: string) {
 	// 	this.serviciosRegistrados = this.serviciosRegistrados.filter((servicio: IServicio) => servicio.servicioId !== id);

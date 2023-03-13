@@ -1,12 +1,12 @@
 import { Component, OnInit } from "@angular/core";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { HeaderNavComponent } from "../../components/header-nav/header-nav.component";
-import { ICapacitacion, ICompraCarrito, IServicio, IUsuario } from "src/app/interfaces/interfaces";
+import { ICapacitacion, ICapacitacionRegistrada, IServicio, IServicioRegistrado, IUsuario } from "src/app/interfaces/interfaces";
 import { AuthService } from "src/app/services/auth.service";
 import { CapacitacionService } from "src/app/services/capacitacion.service";
-import { CompraService } from "src/app/services/compra.service";
 import { ServiciosService } from "src/app/services/servicios.service";
 import { MessageService } from "primeng/api";
+import { Router } from "@angular/router";
 
 @Component({
 	selector: "app-usuario",
@@ -15,15 +15,16 @@ import { MessageService } from "primeng/api";
 	providers: [MessageService]
 })
 export class UsuarioComponent {
-	usuario: IUsuario | undefined = this.authService.obtenerUsuarioAutenticado();
+	usuarioAutenticado: IUsuario | null = null;
 
 	editarUsuario: FormGroup = this.fb.group({
-		nombre: [this.usuario?.nombre, [Validators.required]],
-		apellido: [this.usuario?.apellido, [Validators.required]],
-		ciudad: [this.usuario?.ciudad, [Validators.required]],
-		mayorInteres: [this.usuario?.mayorInteres, [Validators.required]],
-		email: [this.usuario?.email, [Validators.required]],
-		password: [this.usuario?.password, [Validators.required]]
+		cedula: [this.usuarioAutenticado?.cedula, [Validators.required]],
+		nombre: [, [Validators.required]],
+		apellido: [, [Validators.required]],
+		ciudad: [, [Validators.required]],
+		celular: [, [Validators.required]],
+		email: [, [Validators.required]],
+		contrasena: [, [Validators.required]]
 	});
 
 	capacitacionColumnas = [
@@ -41,22 +42,47 @@ export class UsuarioComponent {
 		{ field: "servicio", header: "Servicio" }
 	];
 
-	capacitaciones!: ICapacitacion[];
+	capacitaciones!: ICapacitacionRegistrada[];
 
-	compras: ICompraCarrito[];
+	servicios: IServicioRegistrado[] = [];
 
-	servicios: IServicio[] = [];
+	constructor(private serviciosServicio: ServiciosService, private authService: AuthService, private fb: FormBuilder, private capacitacionServicio: CapacitacionService, private router: Router, private messageService: MessageService) {}
 
-	ciudad = ["Guayaquil", "Manabi", "Santa Elena", "Esmeralda", "Los Rios", "Latacunga"];
+	ngOnInit() {
+		this.obtenerUsuarioAutenticado();
 
-	constructor(private headerNav: HeaderNavComponent, private serviciosServicio: ServiciosService, private comprasServicio: CompraService, private authService: AuthService, private fb: FormBuilder, private capacitacion: CapacitacionService) {
-		this.obtenerCapacitacion();
+		setTimeout(() => {
+			this.establecerDatosUsuario();
 
+			this.obtenerCapacitaciones();
+
+			this.obtenerServicios();
+		}, 2000);
+	}
+
+	private obtenerUsuarioAutenticado(): void {
 		this.editarUsuario.disable();
 
-		this.compras = comprasServicio.obtenerCompras(authService.obtenerUsuarioAutenticado()?.id);
+		const res = this.authService.obtenerUsuarioAutenticado();
 
-		// this.servicios = serviciosServicio.obtenerServiciosAntes(authService.obtenerUsuarioAutenticado()?.id);
+		res &&
+			res.subscribe((data: IUsuario | null): void => {
+				this.usuarioAutenticado = data;
+			});
+	}
+
+	establecerDatosUsuario() {
+		setTimeout(() => {
+			this.editarUsuario.setValue({
+				cedula: this.usuarioAutenticado?.cedula,
+				nombre: this.usuarioAutenticado?.nombre,
+				apellido: this.usuarioAutenticado?.apellido,
+				ciudad: this.usuarioAutenticado?.ciudad,
+				celular: this.usuarioAutenticado?.celular,
+				email: this.usuarioAutenticado?.email,
+				contrasena: this.usuarioAutenticado?.contrasena
+			});
+		}, 2000);
 	}
 
 	editar() {
@@ -67,22 +93,39 @@ export class UsuarioComponent {
 		this.editarUsuario.disable();
 
 		this.editarUsuario.setValue({
-			nombre: this.usuario?.nombre,
-			apellido: this.usuario?.apellido,
-			ciudad: this.usuario?.ciudad,
-			mayorInteres: this.usuario?.mayorInteres,
-			email: this.usuario?.email,
-			password: this.usuario?.password
+			cedula: this.usuarioAutenticado?.cedula,
+			nombre: this.usuarioAutenticado?.nombre,
+			apellido: this.usuarioAutenticado?.apellido,
+			ciudad: this.usuarioAutenticado?.ciudad,
+			celular: this.usuarioAutenticado?.celular,
+			email: this.usuarioAutenticado?.email,
+			contrasena: this.usuarioAutenticado?.contrasena
 		});
 	}
 
-	obtenerCapacitacion() {
-		// this.capacitaciones = this.capacitacion.obtenerCapacitaciones(this.usuario?.id);
+	obtenerCapacitaciones() {
+		this.capacitacionServicio.obtenerCapacitacionesUsuario(this.usuarioAutenticado?.usuarioId!).subscribe((data: ICapacitacionRegistrada[]) => {
+			this.capacitaciones = data;
+		});
+	}
+
+	obtenerServicios() {
+		this.serviciosServicio.obtenerServiciosUsuario(this.usuarioAutenticado?.usuarioId!).subscribe((data: IServicioRegistrado[]) => {
+			this.servicios = data;
+		});
 	}
 
 	eliminarUsuario() {
-		this.authService.eliminarUsuario(this.usuario?.id);
+		this.authService.eliminarUsuario(this.usuarioAutenticado?.usuarioId!).subscribe({
+			next: () => {
+				localStorage.removeItem("token");
+				localStorage.removeItem("email");
 
-		this.headerNav.ngOnInit();
+				this.router.navigate(["/"]);
+			},
+			error: () => {
+				this.messageService.add({ severity: "error", summary: "Error", detail: "Error al eliminar el ususario" });
+			}
+		});
 	}
 }

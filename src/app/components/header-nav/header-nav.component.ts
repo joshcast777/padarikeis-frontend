@@ -1,5 +1,6 @@
-import { Component, Injectable, OnInit, ViewChild } from "@angular/core";
+import { Component, Injectable, OnInit } from "@angular/core";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
+import { Router } from "@angular/router";
 import { MenuItem, MessageService } from "primeng/api";
 import { IUsuario } from "src/app/interfaces/interfaces";
 import { AuthService } from "src/app/services/auth.service";
@@ -38,15 +39,15 @@ export class HeaderNavComponent implements OnInit {
 		}
 	];
 
+	usuarioAutenticado: IUsuario | null = null;
+
 	visibleLogin: boolean = false;
 
 	visibleRegister: boolean = false;
 
-	usuarioAutenticado: IUsuario | undefined;
-
 	myFormLogin: FormGroup = this.formBuilder.group({
 		email: [, [Validators.required, Validators.pattern(/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i)]],
-		password: [, [Validators.required]]
+		contrasena: [, [Validators.required]]
 	});
 
 	myFormRegister: FormGroup = this.formBuilder.group({
@@ -55,21 +56,20 @@ export class HeaderNavComponent implements OnInit {
 		apellido: [, [Validators.required]],
 		ciudad: [, [Validators.required]],
 		celular: [, [Validators.required, Validators.maxLength(10), Validators.minLength(10)]],
-		// mayorInteres: [, [Validators.required]],
 		email: [, [Validators.required, Validators.pattern(/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,3}$/i)]],
-		password: [, [Validators.required]]
+		contrasena: [, [Validators.required]]
 	});
 
-	constructor(private authService: AuthService, private messageService: MessageService, public carritoServicio: TiendaService, private formBuilder: FormBuilder) {}
+	constructor(private authService: AuthService, private messageService: MessageService, public tiendaServicio: TiendaService, private formBuilder: FormBuilder) {}
 
 	ngOnInit(): void {
-		this.usuarioAutenticado = this.authService.obtenerUsuarioAutenticado();
+		this.obtenerUsuarioAutenticado();
 	}
 
 	logOut() {
-		this.usuarioAutenticado = undefined;
-		this.authService.establecerUsuarioAutenticado(undefined);
-		this.authService.establecerEstaAutenticado(false);
+		this.usuarioAutenticado = null;
+		// this.authService.establecerUsuarioAutenticado(undefined);
+		// this.authService.establecerEstaAutenticado(false);
 
 		this.ngOnInit();
 	}
@@ -83,28 +83,26 @@ export class HeaderNavComponent implements OnInit {
 	}
 
 	onSubmitLogin() {
-		const authData = { ...this.myFormLogin.value };
+		this.authService.iniciarSesion({ ...this.myFormLogin.value }).subscribe({
+			next: (data: string): void => {
+				localStorage.setItem("token", data);
+				localStorage.setItem("email", this.myFormLogin.value.email);
 
-		const errorAuth = this.authService.verificarDatos(authData);
+				this.hideLoginDialog();
+				this.ngOnInit();
+			},
+			error: () => {
+				this.myFormLogin.reset();
 
-		if (errorAuth === "Usuario no existe") {
-			this.messageService.add({ severity: "error", summary: "Error", detail: "Datos no encontrados" });
-			this.onResetLogin();
-
-			return;
-		}
-
-		this.authService.establecerUsuarioAutenticado(authData);
-		this.authService.establecerEstaAutenticado(true);
-
-		this.ngOnInit();
-		this.visibleLogin = false;
+				this.messageService.add({ severity: "error", summary: "Error", detail: "Combinación errónea" });
+			}
+		});
 	}
 
 	onResetLogin() {
 		this.myFormLogin.setValue({
 			email: null,
-			password: null
+			contrasena: null
 		});
 	}
 
@@ -118,23 +116,40 @@ export class HeaderNavComponent implements OnInit {
 	}
 
 	onSubmitRegister() {
-		console.log(this.myFormRegister.value);
-		// const usuarioNuevo = { ...this.myFormRegister.value };
+		this.authService.guardarUsuario({ ...this.myFormRegister.value }).subscribe({
+			next: (data: string): void => {
+				localStorage.setItem("token", data);
+				localStorage.setItem("email", this.myFormRegister.value.email);
 
-		// this.authService.guardarUsuario(usuarioNuevo);
+				this.hideRegisterDialog();
+				this.ngOnInit();
+			},
+			error: () => {
+				this.myFormRegister.reset();
 
-		// this.ngOnInit();
-		// this.visibleRegister = false;
+				this.messageService.add({ severity: "error", summary: "Error", detail: "Error al guardar los datos" });
+			}
+		});
 	}
 
 	onResetRegister() {
 		this.myFormRegister.setValue({
+			cedula: null,
 			nombre: null,
 			apellido: null,
 			ciudad: null,
-			mayorInteres: null,
+			celular: null,
 			email: null,
-			password: null
+			contrasena: null
 		});
+	}
+
+	private obtenerUsuarioAutenticado(): void {
+		const res = this.authService.obtenerUsuarioAutenticado();
+
+		res &&
+			res.subscribe((data: IUsuario | null): void => {
+				this.usuarioAutenticado = data;
+			});
 	}
 }

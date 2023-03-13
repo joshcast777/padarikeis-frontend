@@ -16,21 +16,21 @@
 				</tr>
 			</ng-template>
 
-			<ng-template pTemplate="body" let-carrito>
+			<ng-template pTemplate="body" let-productoCarrito>
 				<tr>
-					<td>{{ carrito.name }}</td>
+					<td>{{ productoCarrito.producto.nombre }}</td>
 					<td style="text-align: center">
-						<img [src]="carrito.imagen" [alt]="carrito.name" style="max-width: 150px; height: 150px" />
+						<img [src]="productoCarrito.producto.imagen" [alt]="productoCarrito.producto.name" style="max-width: 150px; height: 150px" />
 					</td>
-					<td style="text-align: center">{{ carrito.precio | currency : "USD" }}</td>
-					<td style="text-align: center">{{ carrito.cantidad }}</td>
-					<td style="text-align: center">{{ carrito.precio * carrito.cantidad | currency : "USD" }}</td>
+					<td style="text-align: center">{{ productoCarrito.producto.precio | currency : "USD" }}</td>
+					<td style="text-align: center">{{ productoCarrito.cantidad }}</td>
+					<td style="text-align: center">{{ productoCarrito.producto.precio * productoCarrito.cantidad | currency : "USD" }}</td>
 					<td style="text-align: center">
-						<button pButton pRipple icon="pi pi-minus" class="p-button-rounded p-button-success mr-2" style="margin-right: 10px" (click)="restarCantidad(carrito)"></button>
+						<button pButton pRipple icon="pi pi-minus" class="p-button-rounded p-button-success mr-2" style="margin-right: 10px" (click)="restarCantidad(productoCarrito)"></button>
 
-						<button pButton pRipple icon="pi pi-plus" class="p-button-rounded p-button-success mr-2" style="margin-right: 10px" (click)="aumentarCantidad(carrito)"></button>
+						<button pButton pRipple icon="pi pi-plus" class="p-button-rounded p-button-success mr-2" style="margin-right: 10px" (click)="aumentarCantidad(productoCarrito)"></button>
 
-						<button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-danger" (click)="quitarElemento(carrito.id)"></button>
+						<button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-danger" (click)="quitarElemento(productoCarrito)"></button>
 					</td>
 				</tr>
 			</ng-template>

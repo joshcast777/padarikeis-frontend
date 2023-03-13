@@ -1,18 +1,21 @@
 import { Injectable } from "@angular/core";
-import { ActivatedRouteSnapshot, CanActivate, CanLoad, Route, Router, RouterStateSnapshot, UrlSegment, UrlTree } from "@angular/router";
-import { Observable } from "rxjs";
+import { CanActivate, CanLoad, Router } from "@angular/router";
 import { AuthService } from "./services/auth.service";
 
 @Injectable({
 	providedIn: "root"
 })
 export class UsuarioGuard implements CanActivate, CanLoad {
+	autenticado: boolean = false;
+
 	constructor(private authServicio: AuthService, private router: Router) {}
 
 	canActivate(): boolean {
-		let estaAutenticado = this.authServicio.obtenerEstaAutenticado();
+		const res = this.authServicio.obtenerUsuarioAutenticado();
 
-		if (estaAutenticado) return estaAutenticado;
+		this.autenticado = res ? true : false;
+
+		if (this.autenticado) return this.autenticado;
 		else {
 			this.router.navigate(["/"]);
 
@@ -21,9 +24,11 @@ export class UsuarioGuard implements CanActivate, CanLoad {
 	}
 
 	canLoad(): boolean {
-		let estaAutenticado = this.authServicio.obtenerEstaAutenticado();
+		const res = this.authServicio.obtenerUsuarioAutenticado();
 
-		if (estaAutenticado) return estaAutenticado;
+		this.autenticado = res ? true : false;
+
+		if (this.autenticado) return this.autenticado;
 		else {
 			this.router.navigate(["/"]);
 

@@ -17,7 +17,7 @@
 		<div class="formEstilo">
 			<label for="capacitacion">Capacitacion</label>
 
-			<p-dropdown inputId="capacitacion" [options]="selectCapacitacion" placeholder="Seleccione" formControlName="capacitacion"></p-dropdown>
+			<p-dropdown inputId="capacitacion" [options]="capacitaciones" optionLabel="nombre" optionValue="capacitacionId" placeholder="Seleccione" formControlName="capacitacionId"></p-dropdown>
 		</div>
 
 		<div class="formEstilo">
@@ -33,23 +33,15 @@
 		</div>
 
 		<div class="formEstilo">
-			<label for="motivo" style="display: block; margin: 20px 0px">¿Por que motivo quiere realizar la capacitacion?</label>
+			<label for="motivo">¿Por que motivo quiere realizar la capacitacion?</label>
 
-			<textarea id="motivo" rows="5" cols="30" pInputTextarea formControlName="comentario"></textarea>
-		</div>
-
-		<div class="formEstilo">
-			<div class="field-checkbox">
-				<p-checkbox [binary]="true" inputId="binary" formControlName="aceptoTermino"></p-checkbox>
-
-				<label for="binary"> Acepto los terminos y condiciones</label>
-			</div>
+			<textarea id="motivo" rows="5" cols="20" pInputTextarea formControlName="motivo"></textarea>
 		</div>
 
 		<div class="botonForm">
-			<button type="reset" pButton pRipple label="Cancelar" class="p-button-outlined mb-2"></button>
+			<button pButton pRipple type="button" label="Cancelar" class="p-button-outlined" (click)="onReset()"></button>
 
-			<button type="submit" pButton pRipple label="Registrarse" class=""></button>
+			<button type="submit" pButton pRipple label="Registrar" [disabled]="formCapacitacion.invalid" class="p-button-raised"></button>
 		</div>
 	</form>
 </p-dialog>

@@ -7,16 +7,18 @@
 
 	<ng-template pTemplate="end">
 		<div *ngIf="usuarioAutenticado; else noAutenticado" class="user-icon">
+			<button pButton pRipple type="button" icon="pi pi-shopping-cart" class="p-button-rounded p-button-secondary" [routerLink]="['/carrito']"></button>
+
 			<p-avatar icon="pi pi-user" styleClass="mr-2" class="avatar-header" size="large" (click)="op.toggle($event)"></p-avatar>
 
 			<p-overlayPanel #op [style]="{ minWidth: 'max-content' }">
 				<ng-template pTemplate>
 					<div class="overlay-panel">
-						<div class="carrito-button" [routerLink]="['/carrito']">
+						<!-- <div class="carrito-button" [routerLink]="['/carrito']">
 							<button pButton pRipple type="button" icon="pi pi-shopping-cart" class="p-button-rounded p-button-secondary"></button>
 
 							<p-badge *ngIf="carritoServicio.longitudCarrito !== 0" value="" severity="warning" class="badge"></p-badge>
-						</div>
+						</div> -->
 
 						<div>
 							<span class="username" [routerLink]="['/usuario']">{{ usuarioAutenticado.nombre + " " + usuarioAutenticado.apellido }}</span>
@@ -49,7 +51,7 @@
 				<div class="input-block">
 					<label for="password">Contraseña</label>
 
-					<p-password inputId="password" formControlName="password" [toggleMask]="true" [feedback]="false" styleClass="input" placeholder="Contraseña"></p-password>
+					<p-password inputId="password" formControlName="contrasena" [toggleMask]="true" [feedback]="false" styleClass="input" placeholder="Contraseña"></p-password>
 				</div>
 			</div>
 
@@ -100,24 +102,6 @@
 					<input type="text" pInputText id="celular" formControlName="celular" pInputText styleClass="input" placeholder="Celular" />
 				</div>
 
-				<!-- <div class="input-block">
-					<label for="mayorInteres">Mayor interés</label>
-
-					<div class="check-intereses">
-						<div class="field-checkbox">
-							<p-checkbox formControlName="mayorInteres" value="carro" inputId="carro"></p-checkbox>
-
-							<label for="carro">Carro</label>
-						</div>
-
-						<div class="field-checkbox">
-							<p-checkbox formControlName="mayorInteres" value="moto" inputId="moto"></p-checkbox>
-
-							<label for="moto">Moto</label>
-						</div>
-					</div>
-				</div> -->
-
 				<div class="input-block">
 					<label for="placaVehiculo">Email</label>
 
@@ -127,7 +111,7 @@
 				<div class="input-block">
 					<label for="password">Contraseña</label>
 
-					<p-password inputId="password" formControlName="password" [toggleMask]="true" [feedback]="false" styleClass="input" placeholder="Contraseña"></p-password>
+					<p-password inputId="password" formControlName="contrasena" [toggleMask]="true" [feedback]="false" styleClass="input" placeholder="Contraseña"></p-password>
 				</div>
 			</div>
 

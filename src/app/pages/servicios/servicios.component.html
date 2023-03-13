@@ -28,7 +28,7 @@
 	</p-card>
 </div>
 
-<p-dialog header="Registrar vehídulo para servicio" [modal]="true" [(visible)]="visible">
+<p-dialog header="Registrar vehículo para servicio" [modal]="true" [(visible)]="visible">
 	<form (ngSubmit)="onSubmit()" autocomplete="off" [formGroup]="myForm" class="form-servicio">
 		<p-fieldset legend="Datos del vehículo" class="datos">
 			<div class="input-block">
@@ -52,18 +52,14 @@
 			<div class="input-block">
 				<label for="servicios">Seleccione servicio</label>
 
-				<p-dropdown inputId="servicios" formControlName="servicio" [options]="nombreServicios" placeholder="Servicio" styleClass="input"></p-dropdown>
+				<p-dropdown inputId="servicios" formControlName="servicioId" [options]="servicios" optionLabel="nombre" optionValue="servicioId" placeholder="Servicio" styleClass="input"></p-dropdown>
 			</div>
 		</p-fieldset>
 
 		<div class="form-buttons">
-			<button pButton pRipple type="reset" label="Cancelar" class="p-button-outlined" (click)="visible = false"></button>
+			<button pButton pRipple type="button" label="Cancelar" class="p-button-outlined" (click)="onReset()"></button>
 
 			<button pButton pRipple type="submit" label="Guardar" [disabled]="myForm.invalid" class="p-button-raised"></button>
 		</div>
 	</form>
 </p-dialog>
-
-<!-- <ng-template #noEstaAutenticado>
-	<p-messages [(value)]="msg" [closable]="false"></p-messages>
-</ng-template> -->

@@ -1,6 +1,6 @@
 import { Component } from "@angular/core";
 import { MessageService } from "primeng/api";
-import { IProducto } from "src/app/interfaces/interfaces";
+import { IProducto, IUsuario } from "src/app/interfaces/interfaces";
 import { AuthService } from "src/app/services/auth.service";
 import { TiendaService } from "src/app/services/tienda.service";
 
@@ -43,28 +43,35 @@ export class CatalogoComponent {
 
 	estaAutenticado: boolean = false;
 
-	visible: boolean = false;
+	// visible: boolean = false;
 
-	constructor(private authService: AuthService, private tiendaServicio: TiendaService, private messageService: MessageService) {
-		tiendaServicio.obtenerProductos().subscribe((productos: IProducto[]): void => {
+	constructor(private authService: AuthService, private tiendaServicio: TiendaService, private messageService: MessageService) {}
+
+	ngOnInit(): void {
+		this.tiendaServicio.obtenerProductos().subscribe((productos: IProducto[]): void => {
 			this.productosAuto = productos.filter((producto: IProducto): boolean => producto.categoriaProductoId === 1);
 
-			this.productosMoto = productos.filter((producto: IProducto):boolean => producto.categoriaProductoId === 2);
+			this.productosMoto = productos.filter((producto: IProducto): boolean => producto.categoriaProductoId === 2);
 
 			this.productosAccesorio = productos.filter((producto: IProducto): boolean => producto.categoriaProductoId === 3);
 		});
-	}
 
-	ngOnInit(): void {
 		this.validarAutenticado();
 	}
 
 	validarAutenticado() {
-		this.estaAutenticado = this.authService.obtenerUsuarioAutenticado() ? true : false;
+		const res = this.authService.obtenerUsuarioAutenticado();
+
+		this.estaAutenticado = res ? true : false;
 	}
 
 	agregarElemento(product: IProducto) {
-		// this.estaAutenticado && this.validarAutenticado();
-		// this.estaAutenticado ? this.tiendaServicio.agregarElemento({ ...product }) : this.messageService.add({ severity: "warn", summary: "Aviso", detail: "Debe iniciar sesión" });
+		if (!this.estaAutenticado) {
+			this.messageService.add({ severity: "warn", summary: "Aviso", detail: "Debe iniciar sesión" });
+
+			return;
+		}
+
+		this.tiendaServicio.agregarElemento(product);
 	}
 }

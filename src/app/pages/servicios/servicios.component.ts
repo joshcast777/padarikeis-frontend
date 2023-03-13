@@ -2,7 +2,7 @@ import { Component } from "@angular/core";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { MessageService } from "primeng/api";
 import { DropdownItem } from "primeng/dropdown";
-import { IServicio } from "src/app/interfaces/interfaces";
+import { IServicio, IServicioRegistrado, IUsuario } from "src/app/interfaces/interfaces";
 import { AuthService } from "src/app/services/auth.service";
 import { ServiciosService } from "src/app/services/servicios.service";
 import { v4 as uuid } from "uuid";
@@ -24,9 +24,7 @@ export class ServiciosComponent {
 
 	estaAutenticado: boolean = false;
 
-	// servicios = ["Aire Acondicionado", "Venta de Accesorios", "Balanceo", "Electrónica", "Frenos", "Inyectores", "Limpieza", "Lubricación", "Motores", "Latonería y Pintura", "Suspensión y Dirección", "Transmisión"];
-
-	nombreServicios: string[] = this.servicios.map((servicio: IServicio): string => servicio.nombre);
+	nombreServicios: string[] = [];
 
 	marcasVehiculos = ["Nissan", "Toyota", "Chery", "Chevrolet", "Mazda", "Hyundai", "Dongfeng"];
 
@@ -34,42 +32,58 @@ export class ServiciosComponent {
 		placaVehiculo: [, [Validators.required]],
 		marcaVehiculo: [, [Validators.required]],
 		anioVehiculo: [, [Validators.required, Validators.max(this.anioFabricacion), Validators.min(this.anioFabricacion - 15)]],
-		servicio: [, [Validators.required]]
+		servicioId: [, [Validators.required]]
 	});
 
-	constructor(private serviciosServicio: ServiciosService, private authService: AuthService, private messageService: MessageService, private formBuilder: FormBuilder) {
+	constructor(private serviciosServicio: ServiciosService, private authService: AuthService, private messageService: MessageService, private formBuilder: FormBuilder) {}
+
+	ngOnInit(): void {
 		this.validarAutenticado();
 
-		serviciosServicio.obtenerServicios().subscribe((servicios: IServicio[]): IServicio[] => (this.servicios = servicios));
-		console.log(this.servicios);
+		this.serviciosServicio.obtenerServicios().subscribe((servicios: IServicio[]): void => {
+			this.servicios = servicios;
+
+			this.nombreServicios = servicios.map((servicio: IServicio): string => servicio.nombre);
+		});
 	}
 
 	validarAutenticado() {
-		this.estaAutenticado = this.authService.obtenerUsuarioAutenticado() ? true : false;
+		const res = this.authService.obtenerUsuarioAutenticado();
+
+		this.estaAutenticado = res ? true : false;
 	}
 
 	showDialogOrToast() {
-		this.validarAutenticado();
-
 		this.estaAutenticado ? (this.visible = true) : this.messageService.add({ severity: "warn", summary: "Aviso", detail: "Debe iniciar sesión" });
 	}
 
 	onSubmit() {
-		const servicioData: IServicio = { ...this.myForm.value };
+		const datoServicio: IServicioRegistrado = { ...this.myForm.value };
 
-		// this.serviciosServicio.agregarServicio(servicioData);
+		this.authService.obtenerUsuarioAutenticado()?.subscribe((data: IUsuario): number => (datoServicio.usuarioId = data.usuarioId));
 
-		this.visible = false;
+		console.log(datoServicio);
 
-		this.messageService.add({ severity: "success", summary: "Éxito", detail: "Servicio agendado" });
+		this.serviciosServicio.agregarServicio(datoServicio).subscribe({
+			next: (): void => {
+				this.visible = false;
+
+				this.messageService.add({ severity: "success", summary: "Éxito", detail: "Servicio registrado" });
+			},
+			error: (): void => {
+				this.messageService.add({ severity: "error", summary: "Error", detail: "Error al registrar el servicio" });
+			}
+		});
 	}
 
 	onReset() {
+		this.visible = false;
+
 		this.myForm.setValue({
 			placaVehiculo: null,
 			marcaVehiculo: null,
-			anioFabricacion: null,
-			servicios: null
+			anioVehiculo: null,
+			servicioId: null
 		});
 	}
 }
